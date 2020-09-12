@@ -68,6 +68,7 @@
     display: flex;
     flex: 1;
     justify-content: space-between;
+    align-items: center;
   }
   .overlay-row.row-center {
     justify-content: center;
@@ -114,28 +115,30 @@
 
 <div class="player-overlay {hidden ? 'hidden' : ''}">
   {#each $slots as row, i}
-    <div class="overlay-row {getRowStyle(row, i)}">
-      {#each row as slot, j}
-        {#if slot.player}
-          <div
-            draggable="true"
-            on:dragstart={(e) => onDragPlayer(e, slot.player, i, j)}
-            on:dragend={onDragEnd}
-            class="overlay-player {slot.hover ? 'target' : ''}
-              {!slot.player ? 'empty' : ''}
-              {i === GOAL_LINE && j !== CENTER ? 'dead' : ''}
-              {i === GOAL_LINE && j === CENTER ? 'goal' : ''}">
-            <div class="player-image">
-              <PlayerImage width="100%" size="40" player={slot.player} />
-              <svg viewBox="0 0 100 35" width="100%" class="name-box">
-                <text x="50%" y="23" text-anchor="middle">
-                  {slot.player.web_name}
-                </text>
-              </svg>
+    {#if slots.rowsWithPlayers() < 5 || slots.rowHasPlayers(row)}
+      <div class="overlay-row {getRowStyle(row, i)}">
+        {#each row as slot, j}
+          {#if slot.player}
+            <div
+              draggable="true"
+              on:dragstart={(e) => onDragPlayer(e, slot.player, i, j)}
+              on:dragend={onDragEnd}
+              class="overlay-player {slot.hover ? 'target' : ''}
+                {!slot.player ? 'empty' : ''}
+                {i === GOAL_LINE && j !== CENTER ? 'dead' : ''}
+                {i === GOAL_LINE && j === CENTER ? 'goal' : ''}">
+              <div class="player-image">
+                <PlayerImage width="100%" size="40" player={slot.player} />
+                <svg viewBox="0 0 100 35" width="100%" class="name-box">
+                  <text x="50%" y="23" text-anchor="middle">
+                    {slot.player.web_name}
+                  </text>
+                </svg>
+              </div>
             </div>
-          </div>
-        {/if}
-      {/each}
-    </div>
+          {/if}
+        {/each}
+      </div>
+    {/if}
   {/each}
 </div>

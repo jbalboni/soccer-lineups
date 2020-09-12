@@ -17,6 +17,19 @@ function createSlotStore() {
       slots[i][j] = { ...slots[i][j], ...data };
       set(slots);
     },
+    isFull() {
+      return (
+        slots.reduce((acc, current) => {
+          return acc + current.filter((slot) => slot.player).length;
+        }, 0) === 11
+      );
+    },
+    rowsWithPlayers() {
+      return slots.filter((row) => row.some((slot) => slot.player)).length;
+    },
+    rowHasPlayers(row) {
+      return row.some((slot) => slot.player);
+    },
   };
 }
 

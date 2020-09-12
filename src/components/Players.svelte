@@ -1,6 +1,6 @@
 <script>
   import PlayerImage from "../components/PlayerImage.svelte";
-  import { activeDrag } from "../stores.js";
+  import { activeDrag, slots } from "../stores.js";
   export let players;
 
   function onDragPlayer(event, player) {
@@ -36,7 +36,7 @@
 <ul>
   {#each players as player}
     <li
-      draggable="true"
+      draggable={slots.isFull() ? null : 'true'}
       on:dragstart={(e) => onDragPlayer(e, player)}
       on:dragend={onDragEnd}>
       <PlayerImage width="50px" size="40" {player} />
