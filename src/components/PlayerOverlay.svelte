@@ -2,20 +2,29 @@
   import PlayerImage from "../components/PlayerImage.svelte";
   export let slots;
 
+  const WIDE_LEFT = 0;
+  const INNER_LEFT = 1;
+  const CENTER = 2;
+  const INNER_RIGHT = 3;
+  const WIDE_RIGHT = 4;
+
+  const BACK_LINE = 4;
+  const GOAL_LINE = 5;
+
   function onDragEnter(event, i, j) {
-    if (i !== 5 || j === 2) {
+    if (i !== GOAL_LINE || j === CENTER) {
       event.preventDefault();
       slots[i][j] = { ...slots[i][j], hover: true };
     }
   }
   function onDragLeave(event, i, j) {
-    if (i !== 5 || j === 2) {
+    if (i !== GOAL_LINE || j === CENTER) {
       event.preventDefault();
       slots[i][j] = { ...slots[i][j], hover: false };
     }
   }
   function onDrop(event, i, j) {
-    if (i !== 5 || j === 2) {
+    if (i !== GOAL_LINE || j === CENTER) {
       event.preventDefault();
       const data = JSON.parse(event.dataTransfer.getData("players/data"));
       slots[i][j] = { player: data, hover: false };
@@ -30,20 +39,20 @@
     if (playerCount === 1) {
       const playerIndex = row.findIndex((slot) => slot.player);
 
-      if (playerIndex < 2) {
+      if (playerIndex < CENTER) {
         return "row-start";
-      } else if (playerIndex > 2) {
+      } else if (playerIndex > CENTER) {
         return "row-end";
       }
 
       return "row-center";
     }
     if (playerCount === 2 || playerCount === 3) {
-      if (row[4].player || row[0].player) {
+      if (row[WIDE_RIGHT].player || row[WIDE_LEFT].player) {
         return "row-wide";
       }
 
-      if (index === 4) {
+      if (index === BACK_LINE) {
         return "row-narrow-back";
       }
 
@@ -118,8 +127,8 @@
             on:dragleave={(e) => onDragLeave(e, i, j)}
             class="overlay-player {slot.hover ? 'target' : ''}
               {!slot.player ? 'empty' : ''}
-              {i === 5 && j !== 2 ? 'dead' : ''}
-              {i === 5 && j === 2 ? 'goal' : ''}">
+              {i === GOAL_LINE && j !== CENTER ? 'dead' : ''}
+              {i === GOAL_LINE && j === CENTER ? 'goal' : ''}">
             <div class="player-image">
               <PlayerImage width="100%" size="40" player={slot.player} />
               <svg viewBox="0 0 100 35" width="100%" class="name-box">
