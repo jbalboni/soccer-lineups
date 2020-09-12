@@ -1,6 +1,6 @@
 <script>
+  import PlayerImage from "../components/PlayerImage.svelte";
   import { activeDrag } from "../stores.js";
-  const playersWithFallback = {};
 
   const slots = new Array(6).fill(null).map(() =>
     new Array(5).fill({
@@ -31,10 +31,13 @@
 
 <style>
   .field {
+    box-sizing: border-box;
     position: relative;
     margin: 0 auto;
-    height: 750px;
-    width: 469px;
+    height: 100%;
+    width: 63vh;
+    /* height: 750px; */
+    /* width: 469px; */
     border: 3px solid white;
     background-color: green;
     display: flex;
@@ -92,7 +95,6 @@
     justify-content: space-between;
   }
   .field-slot {
-    padding: 8px;
   }
   .field-slot.active {
     margin: 8px;
@@ -106,6 +108,19 @@
   }
   .field-slot.dead {
     background-color: transparent;
+  }
+  .player-image {
+    position: relative;
+  }
+  .name-box {
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    right: 0;
+    color: white;
+    background-color: purple;
+    padding: 4px;
+    text-align: center;
   }
 </style>
 
@@ -135,11 +150,10 @@
                 {i === 5 && j !== 2 ? 'dead' : ''}
                 {i === 5 && j === 2 ? 'goal' : ''}">
               {#if slot.player}
-                <img
-                  width="100%"
-                  on:error={() => (playersWithFallback[slot.player.id] = true)}
-                  src={`https://resources.premierleague.com/premierleague/photos/players/40x40/${playersWithFallback[slot.player.id] ? 'Photo-Missing.png' : `p${slot.player.code}.png`}`}
-                  alt={slot.player.web_name} />
+                <div class="player-image">
+                  <PlayerImage width="100%" size="40" player={slot.player} />
+                  <div class="name-box">{slot.player.web_name}</div>
+                </div>
               {/if}
             </div>
           {/if}

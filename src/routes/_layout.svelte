@@ -1,9 +1,8 @@
 <style>
   main {
-    background-color: #eee;
-    padding: 2em;
-    margin: 0 auto;
-    box-sizing: border-box;
+    background-color: #333;
+    height: 100vh;
+    overflow: hidden;
   }
 </style>
 
