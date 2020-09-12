@@ -89,16 +89,20 @@
     margin: auto 5vh;
   }
   .player-image {
+    width: 9vh;
+    height: 9vh;
     position: relative;
   }
   .name-box {
     position: absolute;
-    bottom: -16px;
+    bottom: -25px;
     left: 0;
-    right: 0;
-    color: white;
     background-color: purple;
-    padding: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .name-box > text {
+    fill: white;
     text-align: center;
   }
 </style>
@@ -118,7 +122,11 @@
               {i === 5 && j === 2 ? 'goal' : ''}">
             <div class="player-image">
               <PlayerImage width="100%" size="40" player={slot.player} />
-              <div class="name-box">{slot.player.web_name}</div>
+              <svg viewBox="0 0 100 35" width="100%" class="name-box">
+                <text x="50%" y="23" text-anchor="middle">
+                  {slot.player.web_name}
+                </text>
+              </svg>
             </div>
           </div>
         {/if}
