@@ -91,7 +91,6 @@
           {#if slot.player}
             <div class="player-image">
               <PlayerImage width="100%" size="40" player={slot.player} />
-              <div class="name-box">{slot.player.web_name}</div>
             </div>
           {/if}
         </div>
