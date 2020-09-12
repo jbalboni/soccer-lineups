@@ -1,6 +1,7 @@
 <script>
   import PlayerImage from "../components/PlayerImage.svelte";
-  export let slots;
+  import { activeDrag, slots } from "../stores";
+  export let hidden;
 
   const WIDE_LEFT = 0;
   const INNER_LEFT = 1;
@@ -14,21 +15,31 @@
   function onDragEnter(event, i, j) {
     if (i !== GOAL_LINE || j === CENTER) {
       event.preventDefault();
-      slots[i][j] = { ...slots[i][j], hover: true };
+      slots.updateSlot(i, j, { hover: true });
     }
   }
   function onDragLeave(event, i, j) {
     if (i !== GOAL_LINE || j === CENTER) {
       event.preventDefault();
-      slots[i][j] = { ...slots[i][j], hover: false };
+      slots.updateSlot(i, j, { hover: false });
     }
   }
   function onDrop(event, i, j) {
+    event.preventDefault();
+
     if (i !== GOAL_LINE || j === CENTER) {
-      event.preventDefault();
       const data = JSON.parse(event.dataTransfer.getData("players/data"));
-      slots[i][j] = { player: data, hover: false };
+      slots.updateSlot(i, j, { player: data, hover: false });
     }
+
+    if (event.dataTransfer.getData("players/position")) {
+      const position = JSON.parse(
+        event.dataTransfer.getData("players/position")
+      );
+      slots.updateSlot(position.i, position.j, { player: null, hover: false });
+    }
+
+    activeDrag.set(false);
   }
 </script>
 
@@ -63,20 +74,13 @@
   .player-image {
     position: relative;
   }
-  .name-box {
-    position: absolute;
-    bottom: -16px;
-    left: 0;
-    right: 0;
-    color: white;
-    background-color: purple;
-    padding: 4px;
-    text-align: center;
+  .hidden {
+    transform: translateY(-100%);
   }
 </style>
 
-<div class="field-slots">
-  {#each slots as row, i}
+<div class="field-slots {hidden ? 'hidden' : ''}">
+  {#each $slots as row, i}
     <div class="field-slot-row">
       {#each row as slot, j}
         <div

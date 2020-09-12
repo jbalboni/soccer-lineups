@@ -1,6 +1,8 @@
 <script>
   import PlayerImage from "../components/PlayerImage.svelte";
-  export let slots;
+  import { activeDrag } from "../stores.js";
+  import { slots } from "../stores";
+  export let hidden;
 
   const WIDE_LEFT = 0;
   const INNER_LEFT = 1;
@@ -11,24 +13,15 @@
   const BACK_LINE = 4;
   const GOAL_LINE = 5;
 
-  function onDragEnter(event, i, j) {
-    if (i !== GOAL_LINE || j === CENTER) {
-      event.preventDefault();
-      slots[i][j] = { ...slots[i][j], hover: true };
-    }
+  function onDragPlayer(event, player, i, j) {
+    event.dataTransfer.setData("players/data", JSON.stringify(player));
+    event.dataTransfer.setData("players/position", JSON.stringify({ i, j }));
+    setTimeout(() => {
+      activeDrag.set(true);
+    }, 10);
   }
-  function onDragLeave(event, i, j) {
-    if (i !== GOAL_LINE || j === CENTER) {
-      event.preventDefault();
-      slots[i][j] = { ...slots[i][j], hover: false };
-    }
-  }
-  function onDrop(event, i, j) {
-    if (i !== GOAL_LINE || j === CENTER) {
-      event.preventDefault();
-      const data = JSON.parse(event.dataTransfer.getData("players/data"));
-      slots[i][j] = { player: data, hover: false };
-    }
+  function onDragEnd() {
+    activeDrag.set(false);
   }
   function getRowStyle(row, index) {
     const playerCount = row.filter((col) => col.player).length;
@@ -114,17 +107,20 @@
     fill: white;
     text-align: center;
   }
+  .hidden {
+    transform: translateY(-100%);
+  }
 </style>
 
-<div class="player-overlay">
-  {#each slots as row, i}
+<div class="player-overlay {hidden ? 'hidden' : ''}">
+  {#each $slots as row, i}
     <div class="overlay-row {getRowStyle(row, i)}">
       {#each row as slot, j}
         {#if slot.player}
           <div
             draggable="true"
-            on:dragenter={(e) => onDragEnter(e, i, j)}
-            on:dragleave={(e) => onDragLeave(e, i, j)}
+            on:dragstart={(e) => onDragPlayer(e, slot.player, i, j)}
+            on:dragend={onDragEnd}
             class="overlay-player {slot.hover ? 'target' : ''}
               {!slot.player ? 'empty' : ''}
               {i === GOAL_LINE && j !== CENTER ? 'dead' : ''}

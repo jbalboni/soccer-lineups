@@ -1,15 +1,7 @@
 <script>
-  import PlayerImage from "../components/PlayerImage.svelte";
   import PlayerOverlay from "../components/PlayerOverlay.svelte";
   import FieldSlots from "../components/FieldSlots.svelte";
   import { activeDrag } from "../stores.js";
-
-  const slots = new Array(6).fill(null).map(() =>
-    new Array(5).fill({
-      player: null,
-      hover: false,
-    })
-  );
 </script>
 
 <style>
@@ -75,9 +67,6 @@
   <div class="field__eighteen-yard bottom">
     <div class="field__six-yard bottom" />
   </div>
-  {#if $activeDrag}
-    <FieldSlots {slots} />
-  {:else}
-    <PlayerOverlay {slots} />
-  {/if}
+  <PlayerOverlay hidden={$activeDrag} />
+  <FieldSlots hidden={!$activeDrag} />
 </div>
