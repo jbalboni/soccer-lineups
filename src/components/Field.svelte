@@ -13,60 +13,29 @@
     width: 63vh;
     /* height: 750px; */
     /* width: 469px; */
-    border: 3px solid white;
-    background-color: green;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
   }
-  .field__eighteen-yard {
-    border: 3px solid white;
-    width: 59%;
-    height: 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: flex-end;
-  }
-  .field__eighteen-yard.top {
-    border-top: none;
-  }
-  .field__eighteen-yard.bottom {
-    border-bottom: none;
-    flex-direction: column-reverse;
-  }
-  .field__six-yard {
-    border: 3px solid white;
-    width: 27%;
-    height: 33%;
-  }
-  .field__six-yard.top {
-    border-top: none;
-  }
-  .field__six-yard.bottom {
-    border-bottom: none;
-  }
-  .field__halfway-line {
-    height: 3px;
-    width: 100%;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
 </style>
 
 <div class="field">
-  <div class="field__eighteen-yard top">
-    <div class="field__six-yard top" />
-  </div>
-  <div class="field__halfway-line">
-    <div class="field__circle" />
-  </div>
-  <div class="field__eighteen-yard bottom">
-    <div class="field__six-yard bottom" />
-  </div>
+  <svg viewBox="0 0 75 120" width="100%">
+    <rect x="0" y="0" width="75" height="120" fill="green" />
+    <circle cx="37" cy="12" r="12" fill="transparent" stroke="white" />
+    <circle cx="37" cy="108" r="12" fill="transparent" stroke="white" />
+    <line x1="0" y1="0" x2="0" y2="120" stroke="white" />
+    <line x1="0" y1="0" x2="75" y2="0" stroke="white" />
+    <line x1="0" y1="120" x2="75" y2="120" stroke="white" />
+    <line x1="75" y1="0" x2="75" y2="120" stroke="white" />
+    <line x1="0" y1="60" x2="75" y2="60" stroke="white" />
+    <rect x="15" y="0" width="44" height="18" stroke="white" fill="green" />
+    <rect x="31" y="0" width="12" height="6" stroke="white" fill="green" />
+    <rect x="15" y="102" width="44" height="18" stroke="white" fill="green" />
+    <rect x="31" y="114" width="12" height="6" stroke="white" fill="green" />
+    <circle cx="36" cy="60" r="10" fill="transparent" stroke="white" />
+  </svg>
   <PlayerOverlay hidden={$activeDrag} />
   <FieldSlots hidden={!$activeDrag} />
 </div>
