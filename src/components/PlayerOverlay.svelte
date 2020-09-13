@@ -1,7 +1,7 @@
 <script>
   import PlayerImage from "../components/PlayerImage.svelte";
   import { activeDrag } from "../stores.js";
-  import { slots } from "../stores";
+  import { slots, rowsWithPlayers, rowHasPlayers } from "../stores";
   export let hidden;
 
   const WIDE_LEFT = 0;
@@ -41,6 +41,22 @@
       return "row-center";
     }
     if (playerCount === 2 || playerCount === 3) {
+      if (
+        playerCount === 2 &&
+        row[WIDE_RIGHT].player &&
+        row[INNER_RIGHT].player
+      ) {
+        return "row-end";
+      }
+
+      if (
+        playerCount === 2 &&
+        row[WIDE_LEFT].player &&
+        row[INNER_LEFT].player
+      ) {
+        return "row-start";
+      }
+
       if (row[WIDE_RIGHT].player || row[WIDE_LEFT].player) {
         return "row-wide";
       }
@@ -95,6 +111,7 @@
     width: 9vh;
     height: 9vh;
     position: relative;
+    margin: 8px;
   }
   .name-box {
     position: absolute;
@@ -115,7 +132,7 @@
 
 <div class="player-overlay {hidden ? 'hidden' : ''}">
   {#each $slots as row, i}
-    {#if slots.rowsWithPlayers() < 5 || slots.rowHasPlayers(row)}
+    {#if rowsWithPlayers($slots) < 5 || rowHasPlayers(row)}
       <div class="overlay-row {getRowStyle(row, i)}">
         {#each row as slot, j}
           {#if slot.player}
